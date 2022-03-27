@@ -88,17 +88,17 @@ def spot3(car3) -> Spot:
 
 
 @pytest.fixture
-def spot1_repr(car1_repr, length1) -> Spot:
+def spot1_repr(car1_repr, length1) -> str:
     return f'Spot({car1_repr}, {length1})'
 
 
 @pytest.fixture
-def spot2_repr(car2_repr, length2) -> Spot:
+def spot2_repr(car2_repr, length2) -> str:
     return f'Spot({car2_repr}, {length2})'
 
 
 @pytest.fixture
-def spot3_repr(car3_repr, length3) -> Spot:
+def spot3_repr(car3_repr, length3) -> str:
     return f'Spot({car3_repr}, {length3})'
 
 
