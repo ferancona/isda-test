@@ -24,11 +24,11 @@ class Park:
     """_summary_
     """
     def __init__(self, park_length: int) -> None:
-        self.park_length = park_length
+        self.park_length: int = park_length
         self.spots: List[Spot] = [Spot(None, self.park_length)]
     
     def park_car(self, car: Car) -> bool:
-        car_parked = False
+        car_parked: bool = False
         for index, spot in enumerate(self.spots):
             if spot.occupant is None and spot.length >= car.car_length:
                 self.spots.insert(index, Spot(car, car.car_length))
@@ -42,7 +42,7 @@ class Park:
         return car_parked
     
     def elapse_period(self) -> None:
-        last_spot = self.spots[-1]
+        last_spot: Spot = self.spots[-1]
         if isinstance(last_spot.occupant, Car):
             last_spot.occupant.car_time -= 1
             if last_spot.occupant.car_time == 0:
@@ -61,14 +61,14 @@ class Park:
     def report_utilisation(self) -> float:
         if len(self.spots) == 1 and self.spots[0].occupant is None:
             return 0
-        empty_slots = sum(
+        empty_slots: int = sum(
             (spot.length for spot in self.spots if spot.occupant is None)
         )
         return (self.park_length - empty_slots) / self.park_length
     
     def __repr__(self) -> str:
         # Returns the available slots and the ones occupied by each car.
-        rep = 'Park('
+        rep: str = 'Park('
         for spot in self.spots:
             rep += repr(spot) + ', '
         rep = rep.rstrip(', ') + ')'
