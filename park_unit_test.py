@@ -167,9 +167,7 @@ class TestPark:
             full_park.elapse_period()
         cars_in_park = len(
             [spot for spot in full_park.spots 
-            if (spot.occupant is car1
-                or spot.occupant is car2
-                or spot.occupant is car3)]
+            if spot.occupant in (car1, car2, car3)]
         ) == 3
         assert cars_in_park
         
