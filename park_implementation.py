@@ -16,8 +16,11 @@ class Spot:
     occupant: Optional[Car]
     length: int
 
+    def __len__(self) -> str:
+        return self.length
+
     def __repr__(self) -> str:
-        return f'Spot({self.occupant}, {self.length})'
+        return f'Spot({self.occupant}, {len(self)})'
 
 
 class Park:
@@ -64,10 +67,10 @@ class Park:
         """
         car_parked: bool = False
         for index, spot in enumerate(self.spots):
-            if spot.occupant is None and spot.length >= car.car_length:
+            if spot.occupant is None and len(spot) >= car.car_length:
                 self.spots.insert(index, Spot(car, car.car_length))
                 # If empty Spot's length is 0, remove from list.
-                if (self.spots[index + 1].length - car.car_length) == 0:
+                if (len(self.spots[index + 1]) - car.car_length) == 0:
                     self.spots.pop(index + 1)
                 else:
                     self.spots[index + 1].length -= car.car_length
@@ -94,7 +97,7 @@ class Park:
         if len(self.spots) == 1 and self.spots[0].occupant is None:
             return 0
         empty_slots: int = sum(
-            (spot.length for spot in self.spots if spot.occupant is None)
+            (len(spot) for spot in self.spots if spot.occupant is None)
         )
         return (self.park_length - empty_slots) / self.park_length
 
@@ -118,7 +121,7 @@ class Park:
             # If next spot empty or has a car whose time is over, merge spots.
             if (next_spot.occupant is None
                     or next_spot.occupant.car_time - 1 == 0):
-                spot.length += next_spot.length  # Merge spots' length.
+                spot.length += len(next_spot)  # Merge spots' length.
                 spots.pop(index + 1)  # Remove car or empty spot from park.
                 cls.cleanup_empty_spots(spots=spots, index=index)
 
