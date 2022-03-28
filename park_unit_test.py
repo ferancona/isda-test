@@ -110,7 +110,7 @@ class TestCar:
 class TestSpot:
     def test_repr_with_occupant(self, spot1, spot1_repr):
         assert repr(spot1) == spot1_repr
-    
+
     def test_repr_without_occupant(self):
         spot_length = 1
         spot = Spot(None, spot_length)
@@ -122,11 +122,11 @@ class TestPark:
     @pytest.fixture
     def park_length(self) -> int:
         return 10
-    
+
     @pytest.fixture
     def empty_park(self, park_length) -> Park:
         return Park(park_length=park_length)
-    
+
     @pytest.fixture
     def full_park(self, empty_park, car1, car2, car3) -> Park:
         park = empty_park
@@ -134,77 +134,78 @@ class TestPark:
         park.park_car(car2)
         park.park_car(car3)
         return park
-    
+
     def test_park_car_empty(self, empty_park, car1):
         res = empty_park.park_car(car1)
         car1_in_park = len(
-            [spot for spot in empty_park.spots 
-            if spot.occupant is car1]
+            [spot for spot in empty_park.spots
+             if spot.occupant is car1]
         ) == 1
         assert res is True and car1_in_park
-    
+
     def test_park_car_not_enough_space(self, full_park, park_length):
         happy_car = Car(park_length + 1, 1)
         res = full_park.park_car(happy_car)
         happy_car_in_park = len(
-            [spot for spot in full_park.spots 
-            if spot.occupant is happy_car]
+            [spot for spot in full_park.spots
+             if spot.occupant is happy_car]
         ) == 1
         assert not res and not happy_car_in_park
-    
+
     def test_elapse_period_car_removed(self, full_park, car1):
         for _ in range(car1.car_time):
             full_park.elapse_period()
         car1_in_park = len(
-            [spot for spot in full_park.spots 
-            if spot.occupant is car1]
+            [spot for spot in full_park.spots
+             if spot.occupant is car1]
         ) == 1
         assert not car1_in_park
-    
+
     def test_elapse_period_no_cars_removed(self, full_park, car1, car2, car3):
         car_times = [car1.car_time, car2.car_time, car3.car_time]
         for _ in range(min(car_times) - 1):
             full_park.elapse_period()
         cars_in_park = len(
-            [spot for spot in full_park.spots 
-            if spot.occupant in (car1, car2, car3)]
+            [spot for spot in full_park.spots
+             if spot.occupant in (car1, car2, car3)]
         ) == 3
         assert cars_in_park
-    
-    def test_elapse_period_empty_spots_cleaup(self, empty_park, car1, car2, park_length):
+
+    def test_elapse_period_empty_spots_cleaup(
+            self, empty_park, car1, car2, park_length):
         park = empty_park
         park.park_car(car1)
         park.park_car(car2)
         max_time = max(
-            (spot.occupant.car_time for spot in park.spots 
-            if spot.occupant is not None)
+            (spot.occupant.car_time for spot in park.spots
+             if spot.occupant is not None)
         )
         for _ in range(max_time):
             park.elapse_period()
         assert (
-            len(park.spots) == 1 
-            and park.spots[0].occupant == None 
+            len(park.spots) == 1
+            and park.spots[0].occupant is None
             and park.spots[0].length == park_length
         )
-        
+
     def test_report_utilisation_empty(self, empty_park):
         assert empty_park.report_utilisation() == 0
-    
+
     def test_report_utilisation_full(self, full_park):
         assert full_park.report_utilisation() == 1
-    
+
     def test_report_utilisation_fraction(self, empty_park, car1, park_length):
         park = empty_park
         park.park_car(car1)
         assert park.report_utilisation() == (car1.car_length / park_length)
-    
+
     def test_repr_empty(self, empty_park, park_length):
         assert repr(empty_park) == f'Park(Spot(None, {park_length}))'
-    
+
     def test_repr_full(self, full_park, spot1_repr, spot2_repr, spot3_repr):
         expected = f'Park({spot1_repr}, {spot2_repr}, {spot3_repr})'
         assert repr(full_park) == expected
-    
+
     def test_repr_one_car(self, empty_park, car1, spot1_repr, park_length):
         park = empty_park
         park.park_car(car1)
