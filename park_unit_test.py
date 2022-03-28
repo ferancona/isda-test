@@ -170,6 +170,22 @@ class TestPark:
             if spot.occupant in (car1, car2, car3)]
         ) == 3
         assert cars_in_park
+    
+    def test_elapse_period_empty_spots_cleaup(self, empty_park, car1, car2, park_length):
+        park = empty_park
+        park.park_car(car1)
+        park.park_car(car2)
+        max_time = max(
+            (spot.occupant.car_time for spot in park.spots 
+            if spot.occupant is not None)
+        )
+        for _ in range(max_time):
+            park.elapse_period()
+        assert (
+            len(park.spots) == 1 
+            and park.spots[0].occupant == None 
+            and park.spots[0].length == park_length
+        )
         
     def test_report_utilisation_empty(self, empty_park):
         assert empty_park.report_utilisation() == 0
