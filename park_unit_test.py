@@ -108,6 +108,9 @@ class TestCar:
 
 
 class TestSpot:
+    def test_len(self, spot1, length1):
+        assert len(spot1) == length1
+
     def test_repr_with_occupant(self, spot1, spot1_repr):
         assert repr(spot1) == spot1_repr
 
