@@ -13,10 +13,14 @@ class Car:
 
 @dataclass
 class Spot:
+    """
+    Class that represents a continuous sequence of slots in a park occupied by
+    the same entity. The entity can be either None or a car instance.
+    """
     occupant: Optional[Car]
     length: int
 
-    def __len__(self) -> str:
+    def __len__(self) -> int:
         return self.length
 
     def __repr__(self) -> str:
@@ -121,7 +125,7 @@ class Park:
             # If next spot empty or has a car whose time is over, merge spots.
             if (next_spot.occupant is None
                     or next_spot.occupant.car_time - 1 == 0):
-                spot.length += len(next_spot)  # Merge spots' length.
+                spot.length += len(next_spot)  # Add up spots' length.
                 spots.pop(index + 1)  # Remove car or empty spot from park.
                 cls.cleanup_empty_spots(spots=spots, index=index)
 
